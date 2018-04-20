@@ -80,7 +80,9 @@ class TestCollectionAdmin(unittest.TestCase):
             print("This generally doesn't mean the collection wasn't created with the settings passed.")
             coll2 = self.conn['test_delete_replica']
         time.sleep(3)
-        coll2.delete_replica('core_node2', 'myshard1')
+        firstReplica = list(coll2.shards['shards']['myshard1']['replicas'].dict.keys())[0]
+        result = coll2.delete_replica(firstReplica, 'myshard1')
+        self.assertTrue(result.success)
         coll2.drop()
 
 

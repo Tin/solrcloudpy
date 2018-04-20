@@ -127,6 +127,10 @@ class _Request(object):
                 if len(servers) <= 0:
                     logger.error('No servers left to try')
                     raise SolrException('No servers available')
+            finally:
+                # avoid requests library's keep alive throw exception in python3
+                if r is not None and r.connection:
+                    r.connection.close()
 
         return result
 
